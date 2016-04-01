@@ -73,7 +73,7 @@ class Result implements \ArrayAccess, \IteratorAggregate, ExitCodeInterface
 
     public static function cancelled(TaskInterface $task, $message = '', $data = [])
     {
-        return new self($task, EXITCODE_USER_ABORT, $message, $data);
+        return new self($task, self::EXITCODE_USER_ABORT, $message, $data);
     }
 
     /**

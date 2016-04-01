@@ -16,6 +16,12 @@ class Result implements \ArrayAccess, \IteratorAggregate, ExitCodeInterface
     protected $data = [];
     protected $task;
 
+    /** The command was aborted because the user chose to cancel it at some prompt.
+    This exit code is arbitrarily the same as EX_TEMPFAIL in sysexits.h, although
+    note that shell error codes are distinct from C exit codes, so this alignment
+    not particularly meaningful. */
+    const EXITCODE_USER_ABORT = 75;
+
     public function __construct(TaskInterface $task, $exitCode, $message = '', $data = [])
     {
         $this->task = $task;
@@ -63,6 +69,11 @@ class Result implements \ArrayAccess, \IteratorAggregate, ExitCodeInterface
     public static function success(TaskInterface $task, $message = '', $data = [])
     {
         return new self($task, 0, $message, $data);
+    }
+
+    public static function cancelled(TaskInterface $task, $message = '', $data = [])
+    {
+        return new self($task, EXITCODE_USER_ABORT, $message, $data);
     }
 
     /**
@@ -133,6 +144,11 @@ class Result implements \ArrayAccess, \IteratorAggregate, ExitCodeInterface
     public function wasSuccessful()
     {
         return $this->exitCode === 0;
+    }
+
+    public function wasCancelled()
+    {
+        return $this->exitCode == EXITCODE_USER_ABORT;
     }
 
     /**

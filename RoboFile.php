@@ -299,7 +299,7 @@ class RoboFile extends \Robo\Tasks
         $this->say('You are '.$answer);
         $yes = $this->confirm('Do you want one more question?');
         if (!$yes) {
-            return Result::cancelled($this->collection());
+            return Result::cancelled();
         }
         $lang = $this->askDefault('what is your favorite scripting language?', 'PHP');
         $this->say($lang);
